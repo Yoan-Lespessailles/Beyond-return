@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- dossier classMob : -->
+  <script src="classMob/Mob.class.js" defer></script>
+  <script src="classMob/Monstre.class.js" defer></script>
+  <script src="classMob/Perso.class.js" defer></script>
+  <script src="classMob/monstres.js" defer></script>
+
+  <!-- dossier classObjet : -->
+  <script src="classObjet/Objet.class.js" defer></script>
+  <script src="classObjet/Arme.class.js" defer></script>
+  <script src="classObjet/Armure.class.js" defer></script>
+  <script src="classObjet/Potion.class.js" defer></script>
+  <script src="classObjet/armes.js" defer></script>
+  <script src="classObjet/armures.js" defer></script>
+  <script src="classObjet/potions.js" defer></script>
+
+  <!-- variables : -->
+  <script src="variables.js" defer></script>
+
+  <!-- storage : -->
+  <script src="storage.js" defer></script>
+
+  <!-- inventaire : -->
+  <script src="inventaire.js" defer></script>
+
+  <!-- Combat : -->
+  <script src="combat.js" defer></script>
+
+  <!-- scipt principal : -->
+  <script src="scripts.js" defer></script>
+</head>
+
+<body>
+
+  <video src="videos/village.mp4" autoplay muted loop class="background village"></video>
+
+  <video src="videos/montagne.mp4" autoplay muted loop class="background montagne desactive-video"></video>
+
+  <header class="active">
+    <h1>Beyond Return</h1>
+  </header>
+
+  <main>
+    <!-- Menu principal -->
+    <section class="menu active">
+      <button id="nv-partie">Nouvelle partie</button>
+      <button id="ctn-partie" disabled>Continuer</button>
+      <button id="chroniques">Chroniques</button>
+    </section>
+
+    <!-- Nouvelle partie -->
+    <section class="choix-perso">
+      <svg class="retour" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-x-icon lucide-x">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+      <h2>Création du personnage</h2>
+      <div>
+        <label for="nom">Nom du personnage</label> <input type="text" id="nom" required>
+      </div>
+      <h3>Caractéristiques du personnage :</h3>
+      <div>
+        <legend>Répartition des caractéristiques :</legend>
+        <select name="carac" id="repart-carac">
+          <option value="3,2,1">+3 FORCE / +2 DEXTERITE / +1 CONSTITUTION</option>
+          <option value="3,1,2">+3 FORCE / +1 DEXTERITE / +2 CONSTITUTION</option>
+          <option value="2,3,1">+2 FORCE / +3 DEXTERITE / +1 CONSTITUTION</option>
+          <option value="1,3,2">+1 FORCE / +3 DEXTERITE / +2 CONSTITUTION</option>
+          <option value="2,1,3">+2 FORCE / +1 DEXTERITE / +3 CONSTITUTION</option>
+          <option value="1,2,3">+1 FORCE / +2 DEXTERITE / +3 CONSTITUTION</option>
+        </select>
+      </div>
+      <div class="centrer-bouton">
+        <button id="valid-perso">Paré au combat</button>
+      </div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="intro">
+      <p>
+        On raconte qu’autrefois, le roi Eldran le Doré régna sur le royaume d’Ardhel, jusqu’au jour où la famine et le
+        froid ravagèrent ses terres.
+        Refusant de partager ses richesses, il se réfugia dans la montagne d’Heral-Mir, emportant son or et condamnant
+        l’entrée derrière lui.
+      </p>
+      <p>
+        Depuis, tous ceux qui s’y sont aventurés n’en sont jamais revenus.
+        Seule demeure une inscription gravée sur le seuil de pierre :
+      </p>
+      <p class="citation">
+        « Quiconque franchit ces portes laisse son destin derrière lui. »
+      </p>
+      <p>
+        Certains disent que le roi veille encore sur son trésor…
+        D’autres prétendent que son avidité l’a enchaîné à la montagne pour l’éternité.
+        Mais les légendes attirent toujours les plus braves ou les plus fous.
+      </p>
+      <p>
+        Et ce soir, c’est à ton tour de défier la malédiction d’Heral-Mir.
+      </p>
+      <div class="centrer-bouton">
+        <button id="lancer-partie">Entrer dans la montagne</button>
+      </div>
+    </section>
+
+    <!-- ZONE DE COMBAT -->
+    <section class="zone-combat" id="zoneCombat">
+
+      <svg id="return-home" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-house-icon lucide-house">
+        <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+        <path
+          d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+      </svg>
+
+      <!-- Barre supérieure : compteur + bouton suivant -->
+      <div class="combat-header">
+        <div class="kill-counter">☠️ Kills : <span id="kill-count">0</span></div>
+
+        <button type="button" id="prochain-combat" title="Passer au combat suivant" hidden>
+          Combat suivant
+        </button>
+      </div>
+
+      <div class="combat-cards">
+
+        <!-- Carte joueur -->
+        <div class="card combat-card joueur">
+          <div class="avatar">
+            <svg width="74" height="74" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+              focusable="false">
+              <circle cx="32" cy="20" r="10" fill="rgba(255,255,255,0.04)"></circle>
+              <rect x="14" y="34" width="36" height="20" rx="8" fill="rgba(255,255,255,0.02)"></rect>
+            </svg>
+          </div>
+
+          <h2 id="joueur-nom"></h2>
+
+          <div class="pv-bar" aria-valuemin="0" aria-valuemax=""
+            aria-valuenow="">
+            <div class="pv-fill" style="width: 100%" data-current="" data-max=""></div>
+          </div>
+
+          <div class="pv-text">PV : <span class="pv-actuels"></span> / <span class="pv-max"></span></div>
+
+          <!-- XP -->
+          <div class="xp-zone">
+            <div class="niveau">
+              Niveau <span id="joueur-niveau">1</span>
+            </div>
+            <div class="xp-text">
+              XP : <span id="xp-actuelle">0</span> /
+              <span id="xp-max">5</span>
+            </div>
+          </div>
+
+          <div class="stats">
+            <span title="Force" data-stat="FOR"><strong class="stat-value"></strong></span>
+            <span title="Dextérité" data-stat="DEX"><strong class="stat-value"></strong></span>
+            <span title="Constitution" data-stat="CON"><strong class="stat-value"></strong></span>
+          </div>
+        </div>
+
+        <!-- Carte ennemi -->
+        <div class="card combat-card ennemi">
+          <div class="avatar">
+            <svg width="74" height="74" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+              focusable="false">
+              <circle cx="32" cy="20" r="10" fill="rgba(255,255,255,0.03)"></circle>
+              <path d="M14 38c6-8 30-8 36 0v6H14v-6z" fill="rgba(255,255,255,0.02)"></path>
+            </svg>
+          </div>
+
+          <h2 id="ennemi-nom"></h2>
+
+          <div class="pv-bar" aria-valuemin="0" aria-valuemax=""
+            aria-valuenow="">
+            <div class="pv-fill" style="width: 100%" data-current="" data-max=""></div>
+          </div>
+
+          <div class="pv-text">PV : <span class="pv-actuels"></span> / <span class="pv-max"></span></div>
+
+          <!-- Rang + blocage -->
+          <div class="rang-zone">
+            <div class="rang">
+              Rang : <span id="ennemi-rang"></span>
+            </div>
+            <div class="blocage">
+              <span id="ennemi-blocage"></span>
+            </div>
+          </div>
+
+          <div class="stats">
+            <span title="Force" data-stat="FOR">⚔️ <strong class="stat-value"></strong></span>
+            <span title="Dextérité" data-stat="DEX">🦶 <strong class="stat-value"></strong></span>
+            <span title="Constitution" data-stat="CON">🛡️ <strong class="stat-value"></strong></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Boutons d'action du joueur -->
+      <div class="combat-actions">
+        <button type="button" data-action="attaque" title="Attaquer">Attaquer</button>
+        <button type="button" data-action="contre" title="Contre">Contrer</button>
+        <button type="button" data-action="esquive" title="Esquiver">Esquiver</button>
+        <button type="button" data-action="inventaire" title="Inventaire">Inventaire</button>
+      </div>
+
+      <!-- Panneau des événements de combat -->
+      <div class="combat-event-log"> 
+
+      </div>
+
+    </section>
+
+    <!------------ GAIN DE NIVEAU ------------>
+    <section id="overlay-niveau">
+      <div class="overlay-contenu">
+        <h2>⬆️ Montée de niveau !</h2>
+        <p>Choisissez une caractéristique :</p>
+
+        <button class="btn-stat" data-upgrade="force">+1 Force</button>
+        <button class="btn-stat" data-upgrade="dexterite">+1 Dextérité</button>
+        <button class="btn-stat" data-upgrade="constitution">+1 Constitution</button>
+
+      </div>
+    </section>
+
+    <!------------ POSSIBILITE DE SORTIR ------------>
+    <section id="sortir-montagne">
+      <div class="fenêtre-sortie">
+        <h2>Une lueur perce la roche.</h2>
+        <p>Une sortie est proche…</p>
+        <p>Fuir ou poursuivre la descente dans cet enfer ?</p>
+        <p>Le choix t'appartient...</p>
+        <button class="fuir-montagne">Fuir...</button>
+        <button class="rester-montagne">Poursuivre</button>
+      </div>
+    </section>
+
+    <!------------ INVENTAIRE DU JOUEUR ------------>
+    <section class="inventaire-fenetre">
+
+      <!-- Bouton fermer (croix) -->
+      <svg class="retour inventaire-fermer" xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+
+      <!-- Entête -->
+      <div class="inventaire-entete">
+        <div class="inventaire-titre">
+          <h2>Inventaire</h2>
+        </div>
+
+        <div class="inventaire-info">
+          <span class="inventaire-poids">⚖️ Poids :
+            <strong id="poids-actuel">0.00</strong> /
+            <strong id="poids-max">40</strong>
+          </span>
+
+          <span class="inventaire-pv">❤️ PV :
+            <strong id="inventaire-pv-actuels">0</strong> /
+            <strong id="inventaire-pv-max">0</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- Table des objets -->
+      <div class="inventaire-corps">
+        <table class="table-inventaire">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Quantité</th>
+              <th scope="col">Type</th>
+              <th scope="col">Équipable</th>
+              <th scope="col">Équipé</th>
+              <th scope="col">Poids</th>
+              <th scope="col">Valeur</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="corpsInventaire">
+            <!-- Bourse -->
+            <tr class="ligne-bourse">
+              <td class="objet-nom">Bourse</td>
+              <td class="objet-quantite" id="or-joueur"></td>
+              <td class="objet-type">Argent</td>
+              <td class="objet-equipable">-</td>
+              <td class="objet-equipe">-</td>
+              <td class="objet-poids">0</td>
+              <td class="objet-valeur">1 (par pièce)</td>
+              <td class="objet-actions"></td>
+            </tr>
+
+            <!-- On met le reste de l'inventaire en js ici -->
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pied de fenêtre -->
+      <div class="inventaire-pied">
+        <div class="inventaire-astuce">
+          Survolez un objet pour voir sa description.
+        </div>
+        <div class="inventaire-boutons">
+          <button type="button" class="btn-tri">Trier</button>
+          <button type="button" class="inventaire-fermer">Fermer</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="panneau-classement">
+
+      <h2>📜 Chronique des Aventuriers</h2>
+
+      <table class="classement-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Nom</th>
+            <th>Niveau</th>
+            <th>Butin</th>
+            <th>Kills</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+
+        <tbody id="classement-body">
+          <!-- On met le js ici -->
+
+        </tbody>
+      </table>
+
+      <button id="fermer_chroniques">Fermer</button>
+    </section>
+
+  </main>
+</body>
+
+</html>

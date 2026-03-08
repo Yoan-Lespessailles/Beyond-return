@@ -1,0 +1,764 @@
+body {
+  background-color: #18191a;
+  color: whitesmoke;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Vidéo de fond (filtre sombre pour le contraste) et permet aussi d'atténuer la qualité de la vidéo */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.65) grayscale(0.3);
+}
+
+.desactive-video {
+  display: none;
+}
+
+/* Header */
+header {
+  font-family: 'Cinzel', serif;
+  display: none;
+  flex-direction: column;
+  font-size: 1.1rem;
+  background: rgba(30, 30, 34, 0.93);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  min-width: 600px;
+
+  margin-top: 25px;
+  margin-bottom: 35px;
+}
+
+header h1 {
+  color: #d6caa6;
+  text-align: center;
+  font-size: 2.1rem;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 12px #000;
+}
+
+header.active,
+.menu.active,
+.choix-perso.active,
+.intro.active,
+.zone-combat.active,
+#prochain-combat.active,
+.inventaire-fenetre.active,
+#overlay-niveau.active,
+#panneau-classement.active,
+#sortir-montagne.active {
+  display: flex;
+}
+
+/* Menu boutons */
+.menu {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  width: 250px;
+  height: 50px;
+  margin: 12px 0;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-family: 'Cinzel', serif;
+  background: linear-gradient(90deg, #36383c 0%, #111214 100%);
+  border: 1px solid #444;
+  color: whitesmoke;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+  cursor: pointer;
+  text-align: center;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #515358 0%, #191a1c 100%);
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px #232428;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(60%);
+}
+
+button:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background: linear-gradient(90deg, #2a2c30 0%, #0d0e10 100%);
+}
+
+.choix-perso {
+  width: 600px;
+  background: rgba(24, 25, 30, 0.85);
+  box-shadow: 0 6px 36px 0 rgba(0, 0, 0, 0.55), 0 1.5px 9px 0 rgba(50, 50, 60, 0.20) inset;
+  border-radius: 15px;
+  position: relative;
+
+  display: none;
+  flex-direction: column;
+}
+
+.choix-perso div {
+  padding: 0 50px;
+  margin-bottom: 25px;
+}
+
+.retour {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.retour:hover {
+  cursor: pointer;
+}
+
+.choix-perso h2 {
+  margin: 50px 0;
+}
+
+.choix-perso h3 {
+  margin-bottom: 35px;
+  margin-top: 0;
+}
+
+.choix-perso h2,
+.choix-perso h3 {
+  text-align: center;
+  letter-spacing: 1px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+}
+
+.choix-perso label,
+.choix-perso legend {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  font-family: 'Cinzel', serif;
+}
+
+.choix-perso input,
+.choix-perso select {
+  width: 100%;
+  box-sizing: border-box;
+  background: #242528;
+  border: 1px solid #505050;
+  border-radius: 7px;
+  padding: 9px 16px;
+  color: whitesmoke;
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  outline: none;
+  box-shadow: 0 1px 5px rgba(50, 50, 60, 0.08);
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.centrer-bouton {
+  text-align: center;
+}
+
+/* Introduction */
+.intro {
+  width: 600px;
+  min-height: 535px;
+  background: rgba(24, 25, 30, 0.85);
+  box-shadow: 0 6px 36px 0 rgba(0, 0, 0, 0.55), 0 1.5px 9px 0 rgba(50, 50, 60, 0.20) inset;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 1.2rem;
+
+  display: none;
+  flex-direction: column;
+
+  overflow-y: auto;
+}
+
+.intro p {
+  padding: 0 50px;
+}
+
+.citation {
+  font-family: 'Cinzel', serif;
+}
+
+/* ---------- Container zone de combat ---------- */
+
+.combat-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 22px;
+  padding: 0 8px;
+}
+
+.kill-counter {
+  font-size: 1rem;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.zone-combat {
+  max-width: 980px;
+  margin: 56px auto;
+  padding: 22px;
+  background: rgba(28, 30, 38, 0.92);
+  box-shadow: 0 6px 36px rgba(0, 0, 0, 0.6);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  display: none;
+  /* contrôlé par JS */
+  flex-direction: column;
+  color: #e9eef6;
+  overflow: hidden;
+  position: relative;
+}
+
+#return-home {
+  position: absolute;
+  color: #e9eef6bb;
+  top: 10px;
+  left: 10px;
+  width: 35px;
+  height: auto;
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+
+#return-home:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.65);
+}
+
+/* ---------- Cartes face-à-face ---------- */
+.combat-cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 36px;
+  margin-bottom: 32px;
+  align-items: stretch;
+}
+
+/* carte générale */
+.card.combat-card {
+  background: linear-gradient(180deg, rgba(18, 18, 22, 0.96), rgba(14, 14, 18, 0.94));
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(4, 6, 10, 0.6);
+  width: 46%;
+  min-width: 260px;
+  padding: 28px 24px;
+  position: relative;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+
+.card.combat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.65);
+}
+
+/* avatars plus travaillés */
+.card.combat-card .avatar {
+  margin: 0 auto 14px auto;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #27292e 30%, #232324 100%);
+  border: 3px solid rgba(255, 255, 255, 0.03);
+  box-shadow: inset 0 -6px 12px rgba(0, 0, 0, 0.6), 0 6px 20px rgba(0, 0, 0, 0.6);
+  position: relative;
+  overflow: visible;
+}
+
+/* ornement autour de l'avatar */
+.card.combat-card .avatar::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.02), transparent 40%);
+  opacity: 0.6;
+}
+
+/* variante joueur / ennemi */
+.card.joueur {
+  border: 1px solid rgba(100, 160, 110, 0.06);
+}
+
+.card.joueur .avatar {
+  background: linear-gradient(135deg, #35383c 0%, #151617 100%);
+  box-shadow: 0 6px 18px rgba(47, 127, 255, 0.03), inset 0 -6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.card.ennemi .avatar {
+  background: linear-gradient(135deg, #4b2f35 0%, #291c22 100%);
+  box-shadow: 0 6px 18px rgba(200, 40, 40, 0.02), inset 0 -6px 12px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+/* Nom des combattants */
+.card.combat-card h2 {
+  font-size: 1.25rem;
+  letter-spacing: 0.6px;
+  margin: 8px 0 14px 0;
+  color: #e9eef6;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Barre de PV ---------- */
+.pv-bar {
+  width: 100%;
+  height: 14px;
+  background: #242428;
+  border-radius: 8px;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+  margin-bottom: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Couleur de remplissage géré en js en fonction des pv manquants */
+.pv-fill {
+  height: 100%;
+  border-radius: 8px 0 0 8px;
+  transition: width 0.45s cubic-bezier(.2,.9,.2,1), background-color 0.25s;
+  box-shadow: inset 0 -6px 10px rgba(0,0,0,0.25);
+}
+
+
+/* chiffres PV */
+.pv-text {
+  font-size: 1.02rem;
+  margin-bottom: 12px;
+  color: #cdd3d8;
+  display: block;
+}
+
+/* Statistiques */
+.stats {
+  font-size: 1.12rem;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  color: #cdd3d8;
+}
+
+.stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), transparent);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* ---------- XP ---------- */
+
+.niveau,
+.blocage {
+  font-weight: bold;
+  position: absolute;
+  top: 30px;
+  left: 50px;
+}
+
+.xp-text,
+.rang {
+  font-style: italic;
+  position: absolute;
+  top: 30px;
+  right: 50px;
+}
+
+.niveau,
+.xp-text,
+.rang,
+.blocage {
+  pointer-events: none;
+}
+
+/* ---------- Gains de niveau ---------- */
+#overlay-niveau {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-contenu {
+  background: rgb(17, 17, 17);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.btn-stat {
+  width: 200px;
+}
+
+.btn-stat[data-upgrade="dexterite"] {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/* ---------- Fenêtre de sortie ---------- */
+#sortir-montagne {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.fenêtre-sortie {
+  background: rgb(17, 17, 17);
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.fenêtre-sortie button {
+  width: 200px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+/* ---------- Actions ---------- */
+.combat-actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.combat-actions button[disabled] {
+  opacity: 0.45;
+  transform: none;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ---------- Log d’événements ---------- */
+.combat-event-log {
+  background: linear-gradient(180deg, rgba(26, 26, 30, 0.96), rgba(18, 18, 20, 0.96));
+  color: #e9eef6;
+  border-radius: 12px;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.6);
+  padding: 18px;
+  font-size: 1.02rem;
+  min-height: 84px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* événements */
+.combat-event-log p {
+  margin: 0 0 8px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.02);
+  color: #cdd3d8;
+}
+
+.combat-event-log p:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.combat-event-log b {
+  color: #ffd9a6;
+  font-weight: 700;
+}
+
+/* ---------- INVENTAIRE ---------- */
+.inventaire-fenetre {
+  width: 96%;
+  max-width: 920px;
+  background: rgba(28, 30, 38, 0.92);
+  box-shadow: 0 6px 36px rgba(0, 0, 0, 0.6);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 18px;
+  color: #e9eef6;
+  font-family: 'Cormorant Garamond', serif;
+  position: relative;
+  margin: 56px auto;
+  padding: 22px;
+  display: none;
+  flex-direction: column;
+  cursor: default;
+}
+
+/* entête */
+.inventaire-entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 25px;
+}
+
+.inventaire-titre h2 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+}
+
+.inventaire-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.inventaire-pv {
+  color: #e86a6a;
+  font-weight: 600;
+}
+
+.surcharge {
+  color: #e05555;
+  font-weight: bold;
+}
+
+.malus {
+  color: #e74c3c;
+  text-shadow: 0 0 6px rgba(231,76,60,.6);
+}
+
+.inventaire-info span {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+/* table */
+.inventaire-corps {
+  max-height: 56vh;
+  overflow: auto;
+  padding-right: 8px;
+  margin-bottom: 12px;
+}
+
+.table-inventaire {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.table-inventaire thead th {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.table-inventaire td {
+  padding: 10px 12px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.02);
+  font-size: 0.95rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Couleur loot */
+.objet-Commun {
+  color: #f0f0f0;
+}
+
+.objet-Peu-commun {
+  color: #4caf50;
+}
+
+.objet-Rare {
+  color: #4da6ff;
+}
+
+.objet-Epique {
+  color: #b266ff;
+  text-shadow: 0 0 6px rgba(178, 102, 255, 0.6);
+}
+
+/* boutons */
+.objet-actions button {
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  line-height: 1;
+  height: auto;
+  width: auto;
+  margin: 2px;
+}
+
+/* bouton jeter en rouge */
+.btn-danger {
+  background: linear-gradient(90deg, #6b2222, #421717);
+  border-color: rgba(0, 0, 0, 0.45);
+}
+
+/* pied */
+.inventaire-pied {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.inventaire-astuce {
+  color: #cdd3d8;
+  font-size: 0.9rem;
+}
+
+.inventaire-boutons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Panneau classement */
+#panneau-classement {
+  background: rgba(30, 30, 34, 0.93);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  color: whitesmoke;
+  display: none;
+  align-items: center;
+  flex-direction: column;
+  min-width: 560px;
+  cursor: default;
+}
+
+#panneau-classement h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.classement-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.classement-table thead {
+  background: #0f1217;
+}
+
+.classement-table th,
+.classement-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #2a2f3a;
+}
+
+.classement-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.run-mort {
+  color: #e05555;
+  font-weight: bold;
+}
+
+.run-sorti {
+  color: #6ad27c;
+  font-weight: bold;
+}
+
+/* responsive */
+@media (max-width: 920px) {
+  .table-inventaire {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 720px) {
+  .inventaire-conteneur {
+    padding: 12px;
+  }
+
+  .inventaire-titre h2 {
+    font-size: 1.3rem;
+  }
+
+  .table-inventaire thead th {
+    font-size: 0.85rem;
+  }
+
+  .inventaire-info span {
+    font-size: 0.9rem;
+    padding: 5px 8px;
+  }
+}
+
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .combat-cards {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .card.combat-card {
+    width: 100%;
+    padding: 22px;
+  }
+
+  .combat-actions {
+    gap: 12px;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .choix_perso {
+    min-width: 0;
+    width: 96vw;
+    padding: 16vw 4vw;
+    border-radius: 12px;
+  }
+
+  .choix_perso input,
+  .choix_perso select,
+  .choix_perso button {
+    width: 99%;
+  }
+}
